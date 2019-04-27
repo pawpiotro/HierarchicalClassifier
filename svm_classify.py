@@ -1,0 +1,1 @@
+#uzycie gotowego klasyfikatora do klasyfikacji przykladow
