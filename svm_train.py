@@ -64,8 +64,7 @@ clf = svm.SVC(kernel='rbf', gamma=1.2, C=1.0, decision_function_shape='ovr', cac
 
 print("Fitting estimator...")
 x_train_counts = vect.fit_transform(newsgroups.data)
-tfidf.fit(x_train_counts)
-x_train_tf = tfidf.transform(x_train_counts)
+x_train_tf = tfidf.fit_transform(x_train_counts)
 
 print("Fitting classifier...")
 # pipeline.fit(newsgroups.data, newsgroups.target)
