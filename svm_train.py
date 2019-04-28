@@ -23,49 +23,66 @@ class LemmaTokenizer(object):
 
 
 print("Reading data...")
+# remove=('headers', 'footers', 'quotes') <- add to fetch for more realistic data
 newsgroups = fetch_20newsgroups(subset='train')
 
+vect = CountVectorizer(analyzer='word', tokenizer=LemmaTokenizer(), max_features=2000,
+                       stop_words=stopwords.words('english'), max_df=0.3, min_df=0.005, ngram_range=(1,2))
 
-pipeline = Pipeline([
-    ('vect', CountVectorizer()),
-    ('tfidf', TfidfTransformer()),
-    ('clf', svm.SVC())
-])
+tfidf = TfidfTransformer()
 
-# na razie random parametry
-parameters = {
-    'vect__analyzer': 'word',
-    'vect__tokenizer': LemmaTokenizer(),
-    'vect__max_features': 2000,
-    'vect__stop_words': stopwords.words('english'),
-    'vect__max_df': 0.3,
-    'vect__min_df': 0.005,
-    'vect__ngram_range': (1, 2),
-    # 'tfidf__use_idf': (True, False),
-    # 'tfidf__norm': ('l1', 'l2'),
-    'clf__kernel': 'rbf',
-    'clf__gamma': 1.2,
-    'clf__C': 1.0,
-    'clf__decision_function_shape': 'ovr',
-    'clf__cache_size': 1000,
-    'clf__max_iter': -1
-}
+clf = svm.SVC(kernel='rbf', gamma=1.2, C=1.0, decision_function_shape='ovr', cache_size=1000, max_iter=-1)
+#
+# pipeline = Pipeline([
+#     ('vect', CountVectorizer()),
+#     ('tfidf', TfidfTransformer()),
+#     ('clf', svm.SVC())
+# ])
+#
+# # na razie random parametry
+# parameters = {
+#     'vect__analyzer': 'word',
+#     'vect__tokenizer': LemmaTokenizer(),
+#     'vect__max_features': 2000,
+#     'vect__stop_words': stopwords.words('english'),
+#     'vect__max_df': 0.3,
+#     'vect__min_df': 0.005,
+#     'vect__ngram_range': (1, 2),
+#     # 'tfidf__use_idf': (True, False),
+#     # 'tfidf__norm': ('l1', 'l2'),
+#     'clf__kernel': 'rbf',
+#     'clf__gamma': 1.2,
+#     'clf__C': 1.0,
+#     'clf__decision_function_shape': 'ovr',
+#     'clf__cache_size': 1000,
+#     'clf__max_iter': -1
+# }
+#
+# pprint(list(newsgroups.target_names))
+# print(parameters)
+# pipeline.set_params(**parameters)
 
-pprint(list(newsgroups.target_names))
-print(parameters)
-pipeline.set_params(**parameters)
+print("Fitting estimator...")
+x_train_counts = vect.fit_transform(newsgroups.data)
+tfidf.fit(x_train_counts)
+x_train_tf = tfidf.transform(x_train_counts)
 
 print("Fitting classifier...")
-pipeline.fit(newsgroups.data, newsgroups.target)
+# pipeline.fit(newsgroups.data, newsgroups.target)
+clf.fit(x_train_tf, newsgroups.target)
 print("Saving classifier...")
-dump(pipeline, 'clf.joblib')
+# dump(pipeline, 'clf.joblib')
+dump(clf, 'svm.joblib')
 
+print("Testing classifier...")
 newsgroups_test = fetch_20newsgroups(subset='test')
 
-x_test = newsgroups_test.data
+x_test_counts = vect.transform(newsgroups_test.data)
+x_test_tf = tfidf.transform(x_test_counts)
 y_test = newsgroups_test.target
 
-y_pred = pipeline.predict(x_test)
+# y_pred = pipeline.predict(x_test)
+y_pred = clf.predict(x_test_tf)
 
 print(confusion_matrix(y_test, y_pred))
 print(classification_report(y_test, y_pred))
