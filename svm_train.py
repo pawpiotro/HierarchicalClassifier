@@ -5,7 +5,13 @@ from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from nltk import word_tokenize
 from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+
 from joblib import dump, load
+
+from pprint import pprint
+
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
 
 class LemmaTokenizer(object):
@@ -17,39 +23,21 @@ class LemmaTokenizer(object):
 
 
 print("Reading data...")
-newsgroups_train = fetch_20newsgroups(subset='train')
-computer_train = fetch_20newsgroups(subset='train', categories=['comp.graphics',
-                                                                'comp.os.ms-windows.misc',
-                                                                'comp.sys.ibm.pc.hardware',
-                                                                'comp.sys.mac.hardware',
-                                                                'comp.windows.x'])
-misc_train = fetch_20newsgroups(subset='train', categories=['misc.forsale'])
-recreation_train = fetch_20newsgroups(subset='train', categories=['rec.autos',
-                                                                  'rec.motorcycles',
-                                                                  'rec.sport.baseball',
-                                                                  'rec.sport.hockey'])
-science_train = fetch_20newsgroups(subset='train', categories=['sci.crypt',
-                                                               'sci.electronics',
-                                                               'sci.med',
-                                                               'sci.space'])
-politics_train = fetch_20newsgroups(subset='train', categories=['talk.politics.misc',
-                                                                'talk.politics.guns',
-                                                                'talk.politics.mideast'])
-religion_train = fetch_20newsgroups(subset='train', categories=['talk.religion.misc',
-                                                                'alt.atheism',
-                                                                'soc.religion.christian'])
+newsgroups = fetch_20newsgroups(subset='train')
+
 
 pipeline = Pipeline([
     ('vect', CountVectorizer()),
     ('tfidf', TfidfTransformer()),
-    ('clf', svm.SVC()),
+    ('clf', svm.SVC())
 ])
 
+# na razie random parametry
 parameters = {
     'vect__analyzer': 'word',
     'vect__tokenizer': LemmaTokenizer(),
     'vect__max_features': 2000,
-    'vect__stop_words': 'english',
+    'vect__stop_words': stopwords.words('english'),
     'vect__max_df': 0.3,
     'vect__min_df': 0.005,
     'vect__ngram_range': (1, 2),
@@ -63,11 +51,22 @@ parameters = {
     'clf__max_iter': -1
 }
 
+pprint(list(newsgroups.target_names))
 print(parameters)
 pipeline.set_params(**parameters)
 
-print("Fitting...")
-pipeline.fit(newsgroups_train.data, newsgroups_train.target)
-
+print("Fitting classifier...")
+pipeline.fit(newsgroups.data, newsgroups.target)
 print("Saving classifier...")
 dump(pipeline, 'clf.joblib')
+
+newsgroups_test = fetch_20newsgroups(subset='test')
+
+x_test = newsgroups_test.data
+y_test = newsgroups_test.target
+
+y_pred = pipeline.predict(x_test)
+
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+print(accuracy_score(y_test, y_pred))

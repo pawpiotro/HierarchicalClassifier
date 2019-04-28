@@ -1,1 +1,1 @@
-#szukanie najlepszych parametrow klasyfikatora
+# szukanie najlepszych parametrow klasyfikatora
