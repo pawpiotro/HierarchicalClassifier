@@ -1,6 +1,3 @@
-from sklearn.datasets import fetch_20newsgroups
-
-
 # remove=('headers', 'footers', 'quotes') <- add to fetch for more realistic data
 
 comp = ['comp.graphics',
