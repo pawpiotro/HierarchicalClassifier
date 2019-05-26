@@ -24,7 +24,6 @@ pipeline = Pipeline([
     ('clf', svm.SVC())
 ])
 
-# na razie random parametry
 parameters = {
     'vect__analyzer': 'word',
     'vect__tokenizer': LemmaTokenizer(),
@@ -48,31 +47,19 @@ parameters = {
 print(lemma_stopwords)
 pipeline.set_params(**parameters)
 
-print("Fitting estimator...")
-# x_train_counts = vect.fit_transform(newsgroups.data)
-# x_train_tf = tfidf.fit_transform(x_train_counts)
-
 print("Fitting classifier...")
-
-# not possible to transform with pipeline. check if necessary
-
 pipeline.fit(newsgroups.data, newsgroups.target)
-# clf.fit(x_train_tf, newsgroups.target)
+
+print(newsgroups.data)
 print("Saving classifier...")
 dump(pipeline, 'clf.joblib')
-# dump(clf, 'svm.joblib')
 
 # print("Testing classifier...")
 # newsgroups_test = fetch_20newsgroups(subset='test')
-#
-# # x_test_counts = vect.transform(newsgroups_test.data)
-# # x_test_tf = tfidf.transform(x_test_counts)
+# x_test = newsgroups_test.data
 # y_test = newsgroups_test.target
 #
-# # no transform
 # y_pred = pipeline.predict(x_test)
-#
-# # y_pred = clf.predict(x_test_tf)
 #
 # print(confusion_matrix(y_test, y_pred))
 # print(classification_report(y_test, y_pred))
