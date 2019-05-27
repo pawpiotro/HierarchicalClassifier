@@ -1,22 +1,30 @@
+import logging
+import logging.config
 from joblib import dump
 from sklearn import svm
-from sklearn.datasets import fetch_20newsgroups
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.pipeline import Pipeline
-
 from lemma_tokenizer import lemma_stopwords, LemmaTokenizer
 
-print("Reading data...")
-# remove=('headers', 'footers', 'quotes') <- add to fetch for more realistic data
-newsgroups = fetch_20newsgroups(subset='train')
+from consts import TRAIN_DATA
+import categories
+import datasets
+from prepare_data import build_specific_dataset
 
+# Logging
+logging.config.fileConfig('logs/conf/logging.conf',
+                          defaults={'logfilename': './logs/svm_train.log'})
+logger = logging.getLogger('svm_train')
+
+logger.info('Getting training data...')
+dataset = build_specific_dataset(TRAIN_DATA, categories.COMP, datasets.comp,
+                                 datasets.newsgroups)
 # vect = CountVectorizer(analyzer='word', tokenizer=LemmaTokenizer(), max_features=2000,
 #                        stop_words=lemma_stopwords, max_df=0.3, min_df=0.005, ngram_range=(1,2))
 #
 # tfidf = TfidfTransformer()
 #
 # clf = svm.SVC(kernel='rbf', gamma=1.2, C=1.0, decision_function_shape='ovr', cache_size=1000, max_iter=-1)
-
 
 pipeline = Pipeline([
     ('vect', CountVectorizer()),
@@ -43,22 +51,20 @@ parameters = {
     'clf__max_iter': -1
 }
 
-# pprint(list(newsgroups.target_names))
-# print(parameters)
-print(lemma_stopwords)
+logger.info('Stopwords: %s', lemma_stopwords)
 pipeline.set_params(**parameters)
 
-print("Fitting estimator...")
+logger.info('Fitting estimator...')
 # x_train_counts = vect.fit_transform(newsgroups.data)
 # x_train_tf = tfidf.fit_transform(x_train_counts)
 
-print("Fitting classifier...")
-
+logger.info('Fitting classifier...')
 # not possible to transform with pipeline. check if necessary
 
-pipeline.fit(newsgroups.data, newsgroups.target)
+pipeline.fit(dataset.data, dataset.target)
 # clf.fit(x_train_tf, newsgroups.target)
-print("Saving classifier...")
+
+logger.info('Saving classifier...')
 dump(pipeline, 'clf.joblib')
 # dump(clf, 'svm.joblib')
 
