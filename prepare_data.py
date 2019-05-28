@@ -7,8 +7,7 @@ from sklearn.datasets import get_data_home, fetch_20newsgroups
 
 from consts import CLF_DATA, TRAIN_DATA, TEST_DATA
 from consts import POSITIVE_DATA, NEGATIVE_DATA
-import categories
-import datasets
+from classifier_details import all_clfs_details
 
 # Logging
 logging.config.fileConfig('logs/conf/logging.conf',
@@ -78,36 +77,9 @@ def build_dataset(dataset_name, positive_examples, all_examples):
     logger.info('Complete building test dataset: %s', dataset_name)
 
 
-# Creating datasets
-build_dataset(categories.COMP, datasets.comp, datasets.newsgroups)
-build_dataset(categories.MISC, datasets.misc, datasets.newsgroups)
-build_dataset(categories.REL, datasets.rel, datasets.newsgroups)
-build_dataset(categories.POLITICS, datasets.politics, datasets.newsgroups)
-build_dataset(categories.REC, datasets.rec, datasets.newsgroups)
-build_dataset(categories.SCI, datasets.sci, datasets.newsgroups)
-
-build_dataset(categories.COMP_GRAPHICS, ['comp.graphics'], datasets.comp)
-build_dataset(categories.COMP_WINDOWS,
-              ['comp.os.ms-windows.misc'], datasets.comp)
-build_dataset(categories.COMP_IBM, ['comp.sys.ibm.pc.hardware'], datasets.comp)
-build_dataset(categories.COMP_MAC, ['comp.sys.mac.hardware'], datasets.comp)
-build_dataset(categories.COMP_X, ['comp.windows.x'], datasets.comp)
-
-build_dataset(categories.REC_AUTOS, ['rec.autos'], datasets.rec)
-build_dataset(categories.REC_MOTORCYCLES, ['rec.motorcycles'], datasets.rec)
-build_dataset(categories.REC_BASEBALL, ['rec.sport.baseball'], datasets.rec)
-build_dataset(categories.REC_HOCKEY, ['rec.sport.hockey'], datasets.rec)
-
-build_dataset(categories.REL_ATHEISM, ['alt.atheism'], datasets.rel)
-build_dataset(categories.REL_CHRISTIAN, ['soc.religion.christian'],
-              datasets.rel)
-
-build_dataset(categories.SCI_CRYPT, ['sci.crypt'], datasets.sci)
-build_dataset(categories.SCI_ELECTRONICS, ['sci.electronics'], datasets.sci)
-build_dataset(categories.SCI_MED, ['sci.med'], datasets.sci)
-build_dataset(categories.SCI_SPACE, ['sci.space'], datasets.sci)
-
-build_dataset(categories.POLITICS_GUNS, ['talk.politics.guns'],
-              datasets.politics)
-build_dataset(categories.POLITICS_MIDEAST, ['talk.politics.mideast'],
-              datasets.politics)
+if __name__ == "__main__":
+    # Creating datasets
+    for clf_details in all_clfs_details:
+        build_dataset(clf_details.category,
+                      clf_details.positive_examples,
+                      clf_details.all_examples)
