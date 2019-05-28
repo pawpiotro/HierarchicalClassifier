@@ -18,6 +18,10 @@ logger = logging.getLogger('prepare_data')
 # Methods to create datasets
 def build_specific_dataset(data_type, dataset_name, positive_examples,
                            all_examples):
+    logger.info('build_specific_dataset args: data_type - %s, '
+                'dataset_name - %s, positive_examples - %s, '
+                'all_examples - %s', data_type, dataset_name,
+                positive_examples, all_examples)
     scikit_learn_data_home_path = get_data_home()
     data_type_path = os.path.join(scikit_learn_data_home_path, CLF_DATA,
                                   data_type)
@@ -54,8 +58,18 @@ def build_specific_dataset(data_type, dataset_name, positive_examples,
         dataset.target_names = [NEGATIVE_DATA, POSITIVE_DATA]
         for idx in range(len(dataset.target)):
             if all_examples[dataset.target[idx]] in positive_examples:
+                logger.info('Dataset name - %s: '
+                            'Document of category %s has been '
+                            'classified as positive.',
+                            dataset_name,
+                            all_examples[dataset.target[idx]])
                 dataset.target[idx] = 1
             else:
+                logger.info('Dataset name - %s: '
+                            'Document of category %s has been '
+                            'classified as negative.',
+                            dataset_name,
+                            all_examples[dataset.target[idx]])
                 dataset.target[idx] = 0
 
         compressed_dataset = codecs.encode(pickle.dumps(dataset), 'zlib_codec')
