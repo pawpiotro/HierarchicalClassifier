@@ -134,4 +134,4 @@ misc_subtree = [misc_details, [misc_forsale_details]]
 
 categories_tree = [comp_subtree, rec_subtree, sci_subtree,
                    politics_subtree, rel_subtree, misc_subtree]
-tmp_tree = [comp_subtree]
+tmp_tree = [politics_subtree]

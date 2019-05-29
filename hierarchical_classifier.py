@@ -1,4 +1,5 @@
 import copy
+import os
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.metrics import accuracy_score
 
@@ -30,7 +31,7 @@ def get_examples_filenames(datasets, is_positive, result):
     examples_filenames = []
     for i in range(0, len(result)):
         if result[i] == is_positive:
-            examples_filenames.append(datasets.filenames[i])
+            examples_filenames.append(reduce_filename(datasets.filenames[i]))
 
     return examples_filenames
 
@@ -57,15 +58,26 @@ def intersect_datasets(datasets, positive_categories,
             idx = get_category_idx(positive_examples.target_names,
                                    datasets.target_names[datasets.target[i]])
             positive_examples.target.append(idx)
-            positive_examples.filenames.append(datasets.filenames[i])
+            positive_examples.filenames.append(reduce_filename(
+                                                datasets.filenames[i]))
         else:
             negative_examples.data.append(datasets.data[i])
             idx = get_category_idx(negative_examples.target_names,
                                    datasets.target_names[datasets.target[i]])
             negative_examples.target.append(idx)
-            negative_examples.filenames.append(datasets.filenames[i])
+            negative_examples.filenames.append(reduce_filename(
+                                                datasets.filenames[i]))
 
     return (negative_examples, positive_examples)
+
+
+def reduce_filename(filename):
+    second_to_last_slash_idx = filename.rfind(os.path.sep, 0,
+                                              filename.rfind(os.path.sep))
+    next_idx = second_to_last_slash_idx + 1
+    reduced_filename = filename[next_idx:]
+
+    return reduced_filename
 
 
 def report_category(current_category):
@@ -76,12 +88,22 @@ def report_category(current_category):
                 current_category.category,
                 len(current_category.classified_docs),
                 len(current_category.target_classified_docs))
+    logger.info('Category %s - categories examples counts:\n'
+                'real classified examples - %s\n'
+                'target classified examples - %s\n',
+                current_category.category,
+                get_categories_examples_count(
+                    current_category.classified_docs),
+                get_categories_examples_count(
+                    current_category.target_classified_docs))
+    '''
     logger.info('Category %s - real classified examples: %s',
                 current_category.category,
                 current_category.classified_docs)
     logger.info('Category %s - target classified examples: %s',
                 current_category.category,
                 current_category.target_classified_docs)
+    '''
     logger.info('Category %s - confusion matrix: \n%s',
                 current_category.category,
                 current_category.confusion_matrix)
@@ -91,6 +113,19 @@ def report_category(current_category):
     logger.info('Category %s - accuracy score: \n%s',
                 current_category.category,
                 current_category.accuracy_score)
+
+
+def get_categories_examples_count(examples):
+    res = {}
+
+    for example_filename in examples:
+        category = example_filename[0:example_filename.find(os.path.sep)]
+        if category in res:
+            res[category] += 1
+        else:
+            res[category] = 1
+
+    return res
 
 
 # One category classification process
@@ -124,7 +159,7 @@ def classify_one_category(current_category, datasets):
     logger.info('Category %s - updating result structure...',
                 current_category.category)
     current_category.set_classified_docs(positive_data.filenames)
-    target_examples_filenames = get_examples_filenames(datasets,
+    target_examples_filenames = get_examples_filenames(modified_datasets,
                                                        1,
                                                        target_res)
     current_category.set_target_classified_docs(target_examples_filenames)
