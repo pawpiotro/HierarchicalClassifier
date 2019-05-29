@@ -5,8 +5,6 @@ from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.metrics import accuracy_score
 
 from consts import TEST_DATA
-import categories
-import datasets
 from prepare_data import build_specific_dataset
 
 # Logging
@@ -14,19 +12,43 @@ logging.config.fileConfig('logs/conf/logging.conf',
                           defaults={'logfilename': './logs/svm_classify.log'})
 logger = logging.getLogger('svm_classify')
 
-logger.info('Loading classifier...')
-clf = load("clf.joblib")
 
-logger.info('Getting test data...')
-dataset = build_specific_dataset(TEST_DATA, categories.COMP, datasets.comp,
-                                 datasets.newsgroups)
+# Classifications methods
+def classify(category, positive_examples, all_examples, classifier_path):
+    logger.info('Loading classifier: %s', classifier_path)
+    clf = load(classifier_path)
 
-x_test = dataset.data
-y_test = dataset.target
+    logger.info('Getting test data for category: %s...', category)
+    dataset = build_specific_dataset(TEST_DATA, category, positive_examples,
+                                     all_examples)
 
-logger.info('Testing classifier...')
-y_pred = clf.predict(x_test)
+    x_test = dataset.data
+    y_test = dataset.target
 
-print(confusion_matrix(y_test, y_pred))
-print(classification_report(y_test, y_pred))
-print(accuracy_score(y_test, y_pred))
+    logger.info('Testing classifier: %s', classifier_path)
+    y_pred = clf.predict(x_test)
+
+    logger.info('Results for classifier: %s', classifier_path)
+    logger.info(confusion_matrix(y_test, y_pred))
+    logger.info(classification_report(y_test, y_pred))
+    logger.info(accuracy_score(y_test, y_pred))
+
+    return (y_test, y_pred)
+
+
+def classify_dataset(category, dataset, classifier_path):
+    logger.info('Loading classifier: %s', classifier_path)
+    clf = load(classifier_path)
+
+    x_test = dataset.data
+    y_test = dataset.target
+
+    logger.info('Testing classifier: %s', classifier_path)
+    y_pred = clf.predict(x_test)
+
+    logger.info('Results for classifier: %s', classifier_path)
+    logger.info(confusion_matrix(y_test, y_pred))
+    logger.info(classification_report(y_test, y_pred))
+    logger.info(accuracy_score(y_test, y_pred))
+
+    return (y_test, y_pred)

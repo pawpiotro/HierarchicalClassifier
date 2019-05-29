@@ -1,6 +1,4 @@
 import os
-import logging
-import logging.config
 from joblib import dump
 from sklearn import svm
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -10,15 +8,14 @@ from lemma_tokenizer import lemma_stopwords, LemmaTokenizer
 from consts import TRAIN_DATA, CLFS_FOLDER
 from classifier_details import all_clfs_details
 from prepare_data import build_specific_dataset
+from log import getLogger
 
 # Logging
-logging.config.fileConfig('logs/conf/logging.conf',
-                          defaults={'logfilename': './logs/svm_train.log'})
-logger = logging.getLogger('svm_train')
+logger = getLogger('svm_train')
 
 
 # Method to train specific classifier
-def train(category, positive_examples, all_examples):
+def train(category, positive_examples, all_examples, classifier_path):
     if not os.path.exists(CLFS_FOLDER):
         os.makedirs(CLFS_FOLDER)
 
@@ -59,12 +56,11 @@ def train(category, positive_examples, all_examples):
     logger.info('Stopwords: %s', lemma_stopwords)
     pipeline.set_params(**parameters)
 
-    clf_name = category + '_clf'
-    logger.info('Fitting classifier %s...', clf_name)
+    logger.info('Fitting classifier: %s...', classifier_path)
     pipeline.fit(dataset.data, dataset.target)
 
-    logger.info('Saving classifier %s...', clf_name)
-    dump(pipeline, os.path.join(CLFS_FOLDER, clf_name + '.joblib'))
+    logger.info('Saving classifier: %s...', classifier_path)
+    dump(pipeline, classifier_path)
 
     # print("Testing classifier...")
     # newsgroups_test = fetch_20newsgroups(subset='test')
@@ -82,4 +78,5 @@ if __name__ == "__main__":
     for clf_details in all_clfs_details:
         train(clf_details.category,
               clf_details.positive_examples,
-              clf_details.all_examples)
+              clf_details.all_examples,
+              clf_details.classifier_path)

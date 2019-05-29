@@ -1,18 +1,34 @@
 import os
 import codecs
-import logging
-import logging.config
 import pickle
 from sklearn.datasets import get_data_home, fetch_20newsgroups
 
 from consts import CLF_DATA, TRAIN_DATA, TEST_DATA
 from consts import POSITIVE_DATA, NEGATIVE_DATA
 from classifier_details import all_clfs_details
+from log import getLogger
 
 # Logging
-logging.config.fileConfig('logs/conf/logging.conf',
-                          defaults={'logfilename': './logs/prepare_data.log'})
-logger = logging.getLogger('prepare_data')
+logger = getLogger('prepare_data')
+
+
+# Method to get 20newsgroups data
+def get_20newsgroups_datasets(data_type, categories):
+    logger.info('get_20newsgroups_datasets args: data_type - %s, '
+                'categories - %s', data_type, categories)
+    scikit_learn_data_home_path = get_data_home()
+    if os.path.exists(scikit_learn_data_home_path):
+        # For more realistic data -> remove=('headers', 'footers', 'quotes')
+        datasets = fetch_20newsgroups(data_home=scikit_learn_data_home_path,
+                                      subset=data_type,
+                                      categories=categories,
+                                      remove=('headers', 'footers', 'quotes'))
+        return datasets
+    else:
+        datasets = fetch_20newsgroups(subset=data_type,
+                                      categories=categories,
+                                      remove=('headers', 'footers', 'quotes'))
+        return datasets
 
 
 # Methods to create datasets
@@ -40,8 +56,8 @@ def build_specific_dataset(data_type, dataset_name, positive_examples,
 
             return dataset
         except Exception as e:
-            logging.error('Dataset loading from compressed'
-                          'pickle failed: + %s', e)
+            logger.error('Dataset loading from compressed'
+                         'pickle failed: + %s', e)
     else:
         logger.info('File %s doesn\'t exist - creating process started.',
                     dataset_path)
@@ -55,22 +71,8 @@ def build_specific_dataset(data_type, dataset_name, positive_examples,
                                      categories=all_examples,
                                      remove=('headers', 'footers', 'quotes'))
 
-        dataset.target_names = [NEGATIVE_DATA, POSITIVE_DATA]
-        for idx in range(len(dataset.target)):
-            if all_examples[dataset.target[idx]] in positive_examples:
-                logger.info('Dataset name - %s: '
-                            'Document of category %s has been '
-                            'classified as positive.',
-                            dataset_name,
-                            all_examples[dataset.target[idx]])
-                dataset.target[idx] = 1
-            else:
-                logger.info('Dataset name - %s: '
-                            'Document of category %s has been '
-                            'classified as negative.',
-                            dataset_name,
-                            all_examples[dataset.target[idx]])
-                dataset.target[idx] = 0
+        set_pos_neg_example(dataset, dataset_name, positive_examples,
+                            all_examples)
 
         compressed_dataset = codecs.encode(pickle.dumps(dataset), 'zlib_codec')
 
@@ -89,6 +91,32 @@ def build_dataset(dataset_name, positive_examples, all_examples):
     build_specific_dataset(TEST_DATA, dataset_name, positive_examples,
                            all_examples)
     logger.info('Complete building test dataset: %s', dataset_name)
+
+
+# Methods to modify datasets
+def set_pos_neg_example(dataset, category, positive_examples, all_examples):
+    dataset.target_names = [NEGATIVE_DATA, POSITIVE_DATA]
+    positive_count = 0
+    negative_count = 0
+    for idx in range(len(dataset.target)):
+        if all_examples[dataset.target[idx]] in positive_examples:
+#            logger.info('Category - %s: '
+#                        'Document of category %s has been '
+#                        'classified as positive.',
+#                        category,
+#                        all_examples[dataset.target[idx]])
+            dataset.target[idx] = 1
+            positive_count += 1
+        else:
+#            logger.info('Category - %s: '
+#                        'Document of category %s has been '
+#                        'classified as negative.',
+#                        category,
+#                        all_examples[dataset.target[idx]])
+            dataset.target[idx] = 0
+            negative_count += 1
+    logger.info('Category - %s: Positive count - %d, negative_count - %d',
+                category, positive_count, negative_count)
 
 
 if __name__ == "__main__":

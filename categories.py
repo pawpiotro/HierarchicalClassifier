@@ -27,3 +27,5 @@ SCI_SPACE = 'sci_space'
 
 POLITICS_GUNS = 'politics_guns'
 POLITICS_MIDEAST = 'politics_mideast'
+
+MISC_FORSALE = 'misc_forsale'
