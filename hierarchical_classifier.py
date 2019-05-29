@@ -27,46 +27,39 @@ def get_examples_count(result, is_positive):
     return count
 
 
-def get_examples_filenames(datasets, is_positive, result):
+def get_examples_filenames(dataset, is_positive):
     examples_filenames = []
-    for i in range(0, len(result)):
-        if result[i] == is_positive:
-            examples_filenames.append(reduce_filename(datasets.filenames[i]))
+    for i in range(0, len(dataset.target)):
+        if dataset.target[i] == is_positive:
+            examples_filenames.append(reduce_filename(dataset.filenames[i]))
 
     return examples_filenames
 
 
-def get_category_idx(categories, category_name):
-    for i in range(0, len(categories)):
-        if categories[i] == category_name:
-            return i
+def add_example(src_dataset, dst_dataset, example_idx):
+    dst_dataset.data.append(src_dataset.data[example_idx])
+    dst_dataset.filenames.append(reduce_filename(
+                                        src_dataset.filenames[example_idx]))
 
-    return -1
+    target_name = src_dataset.target_names[src_dataset.target[example_idx]]
+    if (target_name in dst_dataset.target_names):
+        idx = dst_dataset.target_names.index(target_name)
+        dst_dataset.target.append(idx)
+    else:
+        dst_dataset.target_names.append(target_name)
+        idx = len(dst_dataset.target_names) - 1
+        dst_dataset.target.append(idx)
 
 
-def intersect_datasets(datasets, positive_categories,
-                       all_categories, real_res):
+def intersect_datasets(datasets, real_res):
     positive_examples = bunch()
-    positive_examples.target_names = positive_categories
     negative_examples = bunch()
-    negative_examples.target_names = [x for x in all_categories
-                                      if x not in positive_categories]
 
     for i in range(0, len(real_res)):
         if real_res[i] == 1:
-            positive_examples.data.append(datasets.data[i])
-            idx = get_category_idx(positive_examples.target_names,
-                                   datasets.target_names[datasets.target[i]])
-            positive_examples.target.append(idx)
-            positive_examples.filenames.append(reduce_filename(
-                                                datasets.filenames[i]))
+            add_example(datasets, positive_examples, i)
         else:
-            negative_examples.data.append(datasets.data[i])
-            idx = get_category_idx(negative_examples.target_names,
-                                   datasets.target_names[datasets.target[i]])
-            negative_examples.target.append(idx)
-            negative_examples.filenames.append(reduce_filename(
-                                                datasets.filenames[i]))
+            add_example(datasets, negative_examples, i)
 
     return (negative_examples, positive_examples)
 
@@ -139,36 +132,33 @@ def classify_one_category(current_category, datasets):
     set_pos_neg_example(modified_datasets,
                         current_category.category,
                         current_category.positive_examples,
-                        current_category.all_examples)
+                        modified_datasets.target_names)
 
     logger.info('Category %s - classifying given data...',
                 current_category.category)
-    (target_res, real_res) = classify_dataset(current_category.category,
-                                              modified_datasets,
-                                              current_category.classifier_path)
+    real_res = classify_dataset(current_category.category,
+                                modified_datasets,
+                                current_category.classifier_path)
 
     logger.info('Category %s - intersecting data to'
                 ' positive and negative data...',
                 current_category.category)
     (negative_data, positive_data) = intersect_datasets(
                                         datasets,
-                                        current_category.positive_examples,
-                                        current_category.all_examples,
                                         real_res)
 
     logger.info('Category %s - updating result structure...',
                 current_category.category)
     current_category.set_classified_docs(positive_data.filenames)
     target_examples_filenames = get_examples_filenames(modified_datasets,
-                                                       1,
-                                                       target_res)
+                                                       1)
     current_category.set_target_classified_docs(target_examples_filenames)
-    current_category.set_confusion_matrix(confusion_matrix(target_res,
-                                                           real_res))
-    current_category.set_classification_report(classification_report(
-                                                                target_res,
-                                                                real_res))
-    current_category.set_accuracy_score(accuracy_score(target_res, real_res))
+    current_category.set_confusion_matrix(
+        confusion_matrix(modified_datasets.target, real_res))
+    current_category.set_classification_report(
+        classification_report(modified_datasets.target, real_res))
+    current_category.set_accuracy_score(
+        accuracy_score(modified_datasets.target, real_res))
 
     logger.info('Category %s - classification process finished.',
                 current_category.category)
@@ -186,7 +176,7 @@ if __name__ == "__main__":
     neg_data = bunch()
     pos_data = bunch()
 
-    for subtree in categories_tree:
+    for subtree in tmp_tree:
         root_category = subtree[0]
         subcategories = subtree[1]
         (neg_data, pos_data) = classify_one_category(root_category,
@@ -197,21 +187,21 @@ if __name__ == "__main__":
         pos_subdata = bunch()
 
         # Due to error described in classifier_details
-        if (root_category.category != categories.MISC):
-            for subcategory in subcategories:
-                (neg_subdata, pos_subdata) = classify_one_category(
-                                                        subcategory,
-                                                        current_all_datasets)
-                current_all_datasets = neg_subdata
-            neg_cnt = len(neg_subdata.target)
-            others_cnt.sub_others_counts[root_category.category] = neg_cnt
+        # if (root_category.category != categories.MISC):
+        for subcategory in subcategories:
+            (neg_subdata, pos_subdata) = classify_one_category(
+                                                    subcategory,
+                                                    current_all_datasets)
+            current_all_datasets = neg_subdata
+        neg_cnt = len(neg_subdata.target)
+        others_cnt.sub_others_counts[root_category.category] = neg_cnt
 
         current_all_datasets = neg_data
     others_cnt.set_main_others_count(len(neg_data.target))
     logger.info('Hierachical classification process finished.')
 
     logger.info('Summary report:')
-    for subtree in categories_tree:
+    for subtree in tmp_tree:
         root_category = subtree[0]
         subcategories = subtree[1]
         report_category(root_category)

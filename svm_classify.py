@@ -51,4 +51,4 @@ def classify_dataset(category, dataset, classifier_path):
     logger.info(classification_report(y_test, y_pred))
     logger.info(accuracy_score(y_test, y_pred))
 
-    return (y_test, y_pred)
+    return y_pred

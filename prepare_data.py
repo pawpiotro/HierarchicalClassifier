@@ -100,19 +100,23 @@ def set_pos_neg_example(dataset, category, positive_examples, all_examples):
     negative_count = 0
     for idx in range(len(dataset.target)):
         if all_examples[dataset.target[idx]] in positive_examples:
-#            logger.info('Category - %s: '
-#                        'Document of category %s has been '
-#                        'classified as positive.',
-#                        category,
-#                        all_examples[dataset.target[idx]])
+            '''
+            logger.info('Category - %s: '
+                        'Document of category %s has been '
+                        'classified as positive.',
+                        category,
+                        all_examples[dataset.target[idx]])
+            '''
             dataset.target[idx] = 1
             positive_count += 1
         else:
-#            logger.info('Category - %s: '
-#                        'Document of category %s has been '
-#                        'classified as negative.',
-#                        category,
-#                        all_examples[dataset.target[idx]])
+            '''
+            logger.info('Category - %s: '
+                        'Document of category %s has been '
+                        'classified as negative.',
+                        category,
+                        all_examples[dataset.target[idx]])
+            '''
             dataset.target[idx] = 0
             negative_count += 1
     logger.info('Category - %s: Positive count - %d, negative_count - %d',

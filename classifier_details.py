@@ -96,9 +96,11 @@ politics_guns_details = ClassifierDetails(categories.POLITICS_GUNS,
 politics_mideast_details = ClassifierDetails(categories.POLITICS_MIDEAST,
                                              ['talk.politics.mideast'],
                                              datasets.politics)
+politics_misc_details = ClassifierDetails(categories.POLITICS_MISC,
+                                          ['talk.politics.misc'],
+                                          datasets.politics)
 
 # ValueError: The number of classes has to be greater than one; got 1 class
-# Due to this error, it isn't located in all_clfs_details
 misc_forsale_details = ClassifierDetails(categories.MISC_FORSALE,
                                          ['misc.forsale'], datasets.newsgroups)
 
@@ -110,7 +112,8 @@ all_clfs_details = [comp_details, misc_details, rel_details, politics_details,
                     rel_atheism_details, rel_christian_details,
                     sci_crypt_details, sci_electronics_details,
                     sci_med_details, sci_space_details, politics_guns_details,
-                    politics_mideast_details]
+                    politics_mideast_details, politics_misc_details,
+                    misc_forsale_details]
 
 comp_subtree = [comp_details, [comp_graphics_details,
                                comp_windows_details, comp_ibm_details,
@@ -125,7 +128,8 @@ sci_subtree = [sci_details, [sci_med_details, sci_space_details,
                              sci_crypt_details, sci_electronics_details]]
 
 politics_subtree = [politics_details, [politics_mideast_details,
-                                       politics_guns_details]]
+                                       politics_guns_details,
+                                       politics_misc_details]]
 
 rel_subtree = [rel_details, [rel_atheism_details,
                              rel_christian_details]]
@@ -134,4 +138,7 @@ misc_subtree = [misc_details, [misc_forsale_details]]
 
 categories_tree = [comp_subtree, rec_subtree, sci_subtree,
                    politics_subtree, rel_subtree, misc_subtree]
-tmp_tree = [politics_subtree]
+
+# For tests
+tmp_clfs_details = [misc_forsale_details]
+tmp_tree = [comp_subtree]
