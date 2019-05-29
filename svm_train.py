@@ -9,6 +9,7 @@ from consts import TRAIN_DATA, CLFS_FOLDER
 from classifier_details import all_clfs_details
 from prepare_data import build_specific_dataset
 from log import getLogger
+from nltk.corpus import stopwords
 
 # Logging
 logger = getLogger('svm_train')
@@ -40,6 +41,7 @@ def train(category, positive_examples, all_examples, classifier_path):
         'vect__tokenizer': LemmaTokenizer(),
         'vect__max_features': 2000,
         'vect__stop_words': lemma_stopwords,
+        # 'vect__stop_words': stopwords.words('english'),
         'vect__max_df': 0.6988043885574027,
         'vect__min_df': 0.009380356271717506,
         'vect__ngram_range': (1, 2),
