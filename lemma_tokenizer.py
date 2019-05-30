@@ -42,4 +42,4 @@ class LemmaTokenizer2(object):
 
 
 lemma_stopwords = [WordNetLemmatizer().lemmatize(t) for t in stopwords.words('english')]
-# lemma_stopwords = [WordNetLemmatizer().lemmatize(t, get_wordnet_pos(t)) for t in stopwords.words('english')]
+lemma_stopwords2 = [WordNetLemmatizer().lemmatize(t, get_wordnet_pos(t)) for t in stopwords.words('english')]

@@ -3,13 +3,15 @@ from joblib import dump
 from sklearn import svm
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.pipeline import Pipeline
-from lemma_tokenizer import lemma_stopwords, LemmaTokenizer
+from lemma_tokenizer import lemma_stopwords, lemma_stopwords2
+from lemma_tokenizer import LemmaTokenizer, LemmaTokenizer2
+from nltk.corpus import stopwords
+
 
 from consts import TRAIN_DATA, CLFS_FOLDER
 from classifier_details import all_clfs_details
 from prepare_data import build_specific_dataset
 from log import getLogger
-from nltk.corpus import stopwords
 
 # Logging
 logger = getLogger('svm_train')

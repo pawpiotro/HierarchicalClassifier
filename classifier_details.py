@@ -79,6 +79,9 @@ rel_atheism_details = ClassifierDetails(categories.REL_ATHEISM,
 rel_christian_details = ClassifierDetails(categories.REL_CHRISTIAN,
                                           ['soc.religion.christian'],
                                           datasets.rel)
+rel_misc_details = ClassifierDetails(categories.REL_MISC,
+                                     ['talk.religion.misc'],
+                                     datasets.rel)
 
 sci_crypt_details = ClassifierDetails(categories.SCI_CRYPT, ['sci.crypt'],
                                       datasets.sci)
@@ -110,6 +113,7 @@ all_clfs_details = [comp_details, misc_details, rel_details, politics_details,
                     comp_x_details, rec_autos_details, rec_motorcycles_details,
                     rec_baseball_details, rec_hockey_details,
                     rel_atheism_details, rel_christian_details,
+                    rel_misc_details,
                     sci_crypt_details, sci_electronics_details,
                     sci_med_details, sci_space_details, politics_guns_details,
                     politics_mideast_details, politics_misc_details,
@@ -132,7 +136,8 @@ politics_subtree = [politics_details, [politics_mideast_details,
                                        politics_misc_details]]
 
 rel_subtree = [rel_details, [rel_atheism_details,
-                             rel_christian_details]]
+                             rel_christian_details,
+                             rel_misc_details]]
 
 misc_subtree = [misc_details, [misc_forsale_details]]
 
@@ -141,4 +146,4 @@ categories_tree = [comp_subtree, rec_subtree, sci_subtree,
 
 # For tests
 tmp_clfs_details = [misc_forsale_details]
-tmp_tree = [comp_subtree]
+tmp_tree = [politics_subtree]

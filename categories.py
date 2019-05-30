@@ -19,6 +19,7 @@ REC_HOCKEY = 'rec_hockey'
 
 REL_ATHEISM = 'rel_atheism'
 REL_CHRISTIAN = 'rel_christian'
+REL_MISC = 'rel_misc'
 
 SCI_CRYPT = 'sci_crypt'
 SCI_ELECTRONICS = 'sci_electronics'

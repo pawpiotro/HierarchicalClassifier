@@ -176,7 +176,7 @@ if __name__ == "__main__":
     neg_data = bunch()
     pos_data = bunch()
 
-    for subtree in tmp_tree:
+    for subtree in categories_tree:
         root_category = subtree[0]
         subcategories = subtree[1]
         (neg_data, pos_data) = classify_one_category(root_category,
@@ -201,7 +201,7 @@ if __name__ == "__main__":
     logger.info('Hierachical classification process finished.')
 
     logger.info('Summary report:')
-    for subtree in tmp_tree:
+    for subtree in categories_tree:
         root_category = subtree[0]
         subcategories = subtree[1]
         report_category(root_category)
