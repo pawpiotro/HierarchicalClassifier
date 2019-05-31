@@ -25,38 +25,18 @@ def classify_one_category(current_category, datasets):
                 current_category.category)
     modified_datasets = copy.deepcopy(datasets)
 
-    '''
-    logger.info('Category %s - \npositive_examples: %s\nall - %s\nmod_target - %s\n',
-                current_category.category,
-                current_category.positive_examples,
-                modified_datasets.target_names,
-                modified_datasets.target)
-    '''
     logger.info('Category %s - marking given examples '
                 'as positive or negative.', current_category.category)
     set_pos_neg_example(modified_datasets,
                         current_category.category,
                         current_category.positive_examples,
                         modified_datasets.target_names)
-    '''
-    logger.info('Category %s - \npositive_examples: %s\nall - %s\nmod_target - %s\ntarget - %s',
-                current_category.category,
-                current_category.positive_examples,
-                modified_datasets.target_names,
-                modified_datasets.target,
-                datasets.target)
-    '''
 
     logger.info('Category %s - classifying given data...',
                 current_category.category)
     real_res = classify_dataset(current_category.category,
                                 modified_datasets,
                                 current_category.classifier_path)
-    '''
-    logger.info('Category %s - \nreal_res: %s\n',
-                current_category.category,
-                real_res)
-    '''
 
     logger.info('Category %s - intersecting data to'
                 ' positive and negative data...',
