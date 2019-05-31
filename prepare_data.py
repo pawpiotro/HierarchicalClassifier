@@ -21,13 +21,13 @@ def get_20newsgroups_datasets(data_type, categories):
         # For more realistic data -> remove=('headers', 'footers', 'quotes')
         datasets = fetch_20newsgroups(data_home=scikit_learn_data_home_path,
                                       subset=data_type,
-                                      categories=categories,
-                                      remove=('headers', 'footers', 'quotes'))
+                                      categories=categories)
+                                      # remove=('headers', 'footers', 'quotes'))
         return datasets
     else:
         datasets = fetch_20newsgroups(subset=data_type,
-                                      categories=categories,
-                                      remove=('headers', 'footers', 'quotes'))
+                                      categories=categories)
+                                      # remove=('headers', 'footers', 'quotes'))
         return datasets
 
 
@@ -68,8 +68,8 @@ def build_specific_dataset(data_type, dataset_name, positive_examples,
         # For more realistic data -> remove=('headers', 'footers', 'quotes')
         dataset = fetch_20newsgroups(data_home=scikit_learn_data_home_path,
                                      subset=data_type,
-                                     categories=all_examples,
-                                     remove=('headers', 'footers', 'quotes'))
+                                     categories=all_examples)
+                                     # remove=('headers', 'footers', 'quotes'))
 
         set_pos_neg_example(dataset, dataset_name, positive_examples,
                             all_examples)

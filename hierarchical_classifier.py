@@ -1,5 +1,4 @@
 import copy
-import os
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.metrics import accuracy_score
 
@@ -8,117 +7,16 @@ import categories
 from classifier_details import categories_tree, tmp_tree
 from consts import TEST_DATA
 from datasets import newsgroups
+from data_utils import get_examples_filenames
+from data_utils import intersect_datasets
 from log import getLogger
 from others import others
 from prepare_data import get_20newsgroups_datasets, set_pos_neg_example
+from report import report_category
 from svm_classify import classify_dataset
 
 # Logging
 logger = getLogger('hierarchical_classifier')
-
-
-# Helpers methods
-def get_examples_count(result, is_positive):
-    count = 0
-    for x in result:
-        if x == is_positive:
-            count += 1
-
-    return count
-
-
-def get_examples_filenames(dataset, is_positive):
-    examples_filenames = []
-    for i in range(0, len(dataset.target)):
-        if dataset.target[i] == is_positive:
-            examples_filenames.append(reduce_filename(dataset.filenames[i]))
-
-    return examples_filenames
-
-
-def add_example(src_dataset, dst_dataset, example_idx):
-    dst_dataset.data.append(src_dataset.data[example_idx])
-    dst_dataset.filenames.append(reduce_filename(
-                                        src_dataset.filenames[example_idx]))
-
-    target_name = src_dataset.target_names[src_dataset.target[example_idx]]
-    if (target_name in dst_dataset.target_names):
-        idx = dst_dataset.target_names.index(target_name)
-        dst_dataset.target.append(idx)
-    else:
-        dst_dataset.target_names.append(target_name)
-        idx = len(dst_dataset.target_names) - 1
-        dst_dataset.target.append(idx)
-
-
-def intersect_datasets(datasets, real_res):
-    positive_examples = bunch()
-    negative_examples = bunch()
-
-    for i in range(0, len(real_res)):
-        if real_res[i] == 1:
-            add_example(datasets, positive_examples, i)
-        else:
-            add_example(datasets, negative_examples, i)
-
-    return (negative_examples, positive_examples)
-
-
-def reduce_filename(filename):
-    second_to_last_slash_idx = filename.rfind(os.path.sep, 0,
-                                              filename.rfind(os.path.sep))
-    next_idx = second_to_last_slash_idx + 1
-    reduced_filename = filename[next_idx:]
-
-    return reduced_filename
-
-
-def report_category(current_category):
-    logger.info('Category %s - test result for classifier: %s',
-                current_category.category, current_category.classifier_path)
-    logger.info('Category %s - real classified examples count - %d, '
-                'target classified examples count - %d.',
-                current_category.category,
-                len(current_category.classified_docs),
-                len(current_category.target_classified_docs))
-    logger.info('Category %s - categories examples counts:\n'
-                'real classified examples - %s\n'
-                'target classified examples - %s\n',
-                current_category.category,
-                get_categories_examples_count(
-                    current_category.classified_docs),
-                get_categories_examples_count(
-                    current_category.target_classified_docs))
-    '''
-    logger.info('Category %s - real classified examples: %s',
-                current_category.category,
-                current_category.classified_docs)
-    logger.info('Category %s - target classified examples: %s',
-                current_category.category,
-                current_category.target_classified_docs)
-    '''
-    logger.info('Category %s - confusion matrix: \n%s',
-                current_category.category,
-                current_category.confusion_matrix)
-    logger.info('Category %s - classification report: \n%s',
-                current_category.category,
-                current_category.classification_report)
-    logger.info('Category %s - accuracy score: \n%s',
-                current_category.category,
-                current_category.accuracy_score)
-
-
-def get_categories_examples_count(examples):
-    res = {}
-
-    for example_filename in examples:
-        category = example_filename[0:example_filename.find(os.path.sep)]
-        if category in res:
-            res[category] += 1
-        else:
-            res[category] = 1
-
-    return res
 
 
 # One category classification process
@@ -127,18 +25,38 @@ def classify_one_category(current_category, datasets):
                 current_category.category)
     modified_datasets = copy.deepcopy(datasets)
 
+    '''
+    logger.info('Category %s - \npositive_examples: %s\nall - %s\nmod_target - %s\n',
+                current_category.category,
+                current_category.positive_examples,
+                modified_datasets.target_names,
+                modified_datasets.target)
+    '''
     logger.info('Category %s - marking given examples '
                 'as positive or negative.', current_category.category)
     set_pos_neg_example(modified_datasets,
                         current_category.category,
                         current_category.positive_examples,
                         modified_datasets.target_names)
+    '''
+    logger.info('Category %s - \npositive_examples: %s\nall - %s\nmod_target - %s\ntarget - %s',
+                current_category.category,
+                current_category.positive_examples,
+                modified_datasets.target_names,
+                modified_datasets.target,
+                datasets.target)
+    '''
 
     logger.info('Category %s - classifying given data...',
                 current_category.category)
     real_res = classify_dataset(current_category.category,
                                 modified_datasets,
                                 current_category.classifier_path)
+    '''
+    logger.info('Category %s - \nreal_res: %s\n',
+                current_category.category,
+                real_res)
+    '''
 
     logger.info('Category %s - intersecting data to'
                 ' positive and negative data...',
@@ -176,7 +94,7 @@ if __name__ == "__main__":
     neg_data = bunch()
     pos_data = bunch()
 
-    for subtree in categories_tree:
+    for subtree in tmp_tree:
         root_category = subtree[0]
         subcategories = subtree[1]
         (neg_data, pos_data) = classify_one_category(root_category,
@@ -201,12 +119,12 @@ if __name__ == "__main__":
     logger.info('Hierachical classification process finished.')
 
     logger.info('Summary report:')
-    for subtree in categories_tree:
+    for subtree in tmp_tree:
         root_category = subtree[0]
         subcategories = subtree[1]
-        report_category(root_category)
+        report_category(logger, root_category)
         for subcategory in subcategories:
-            report_category(subcategory)
+            report_category(logger, subcategory)
 
     logger.info('Not classified docs count: \nmain - %d \ncomp - %d '
                 '\nrec - %d \nsci - %d \npolitics - %d \nrel - %d '

@@ -40,10 +40,10 @@ def train(category, positive_examples, all_examples, classifier_path):
 
     parameters = {
         'vect__analyzer': 'word',
-        'vect__tokenizer': LemmaTokenizer(),
+        # 'vect__tokenizer': LemmaTokenizer2(),
         'vect__max_features': 2000,
-        'vect__stop_words': lemma_stopwords,
-        # 'vect__stop_words': stopwords.words('english'),
+        # 'vect__stop_words': lemma_stopwords2,
+        'vect__stop_words': stopwords.words('english'),
         'vect__max_df': 0.6988043885574027,
         'vect__min_df': 0.009380356271717506,
         'vect__ngram_range': (1, 2),
