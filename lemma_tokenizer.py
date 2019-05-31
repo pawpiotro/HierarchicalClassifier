@@ -13,14 +13,6 @@ def get_wordnet_pos(word):
     return tag_dict.get(tag, wordnet.NOUN)
 
 
-# class LemmaTokenizer(object):
-#     def __init__(self):
-#         self.wnl = WordNetLemmatizer()
-#
-#     def __call__(self, doc):
-#         return [self.wnl.lemmatize(t, get_wordnet_pos(t))
-#                 for t in word_tokenize(doc)]
-
 class LemmaTokenizer(object):
     def __init__(self):
         self.wnl = WordNetLemmatizer()
@@ -30,8 +22,18 @@ class LemmaTokenizer(object):
                 for t in word_tokenize(doc)]
 
 
-# test, probably much slower
+# full lemmatization
 class LemmaTokenizer2(object):
+    def __init__(self):
+        self.wnl = WordNetLemmatizer()
+
+    def __call__(self, doc):
+        return [self.wnl.lemmatize(t, get_wordnet_pos(t))
+                for t in word_tokenize(doc)]
+
+
+# no need for lemma_stopwords
+class LemmaTokenizer3(object):
     def __init__(self):
         self.wnl = WordNetLemmatizer()
 
