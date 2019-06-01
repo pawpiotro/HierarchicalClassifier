@@ -15,28 +15,32 @@ from prepare_data import get_20newsgroups_datasets, set_pos_neg_example
 from report import report_category
 from svm_classify import classify_dataset
 
-# Logging
+# Logowanie
 logger = getLogger('hierarchical_classifier')
 
 
-# One category classification process
+# Proces klasyfikacji dla 1 kategorii
 def classify_one_category(current_category, datasets):
     logger.info('Category %s - classification process started.',
                 current_category.category)
+    # Kopia zbioru, która będzie wykorzystana do klasyfikacji
     modified_datasets = copy.deepcopy(datasets)
 
+    # Oznaczenie przykładów pozytywnych i negatywnych
     logger.info('Category %s - marking given examples '
                 'as positive or negative.', current_category.category)
     set_pos_neg_example(modified_datasets,
                         current_category.category,
                         current_category.positive_examples)
 
+    # Klasyfikacja dostarczonych danych
     logger.info('Category %s - classifying given data...',
                 current_category.category)
     real_res = classify_dataset(current_category.category,
                                 modified_datasets,
                                 current_category.classifier_path)
 
+    # Rozdzielenie danych, uwzględniając wynik klasyfikacji
     logger.info('Category %s - intersecting data to'
                 ' positive and negative data...',
                 current_category.category)
@@ -44,6 +48,7 @@ def classify_one_category(current_category, datasets):
                                         datasets,
                                         real_res)
 
+    # Zapisanie danych związanych z rezultatem klasyfikacji
     logger.info('Category %s - updating result structure...',
                 current_category.category)
     current_category.set_classified_docs(positive_data.filenames)
@@ -62,20 +67,25 @@ def classify_one_category(current_category, datasets):
     return (negative_data, positive_data)
 
 
-# Hierachical classification process
+# Proces klasyfikacji hierarchicznej
 if __name__ == "__main__":
     logger.info('Hierachical classification process started.')
 
+    # Pobranie wszystkich danych testowych
     current_all_datasets = get_20newsgroups_datasets(TEST_DATA, newsgroups)
     logger.info('All docs count - %d', len(current_all_datasets.target))
 
+    # Przygotowanie obiektów wynikowych
     others_cnt = others()
     neg_data = bunch()
     pos_data = bunch()
 
+    # Przechodzenie po drzewie hierachii
     for subtree in categories_tree:
         root_category = subtree[0]
         subcategories = subtree[1]
+        # Proces klasyfikacji dla danej kategorii
+        # Zwraca zbiory danych zaklasyfikowanych i niezaklasyfikowanych
         (neg_data, pos_data) = classify_one_category(root_category,
                                                      current_all_datasets)
 
@@ -83,20 +93,25 @@ if __name__ == "__main__":
         neg_subdata = bunch()
         pos_subdata = bunch()
 
-        # Due to error described in classifier_details
-        # if (root_category.category != categories.MISC):
+        # Zbiór danych zaklasyfikowanych przechodzi do etapu klasyfikacji
+        # 2 poziomu
         for subcategory in subcategories:
             (neg_subdata, pos_subdata) = classify_one_category(
                                                     subcategory,
                                                     current_all_datasets)
             current_all_datasets = neg_subdata
+        # Aktualizacja obiektu, zawierającego informacje o liczbie
+        # niezaklasyfikowanych przykładów dla danej kategorii lub podkategorii
         neg_cnt = len(neg_subdata.target)
         others_cnt.sub_others_counts[root_category.category] = neg_cnt
 
         current_all_datasets = neg_data
+    # Aktualizacja obiektu, zawierającego informacje o liczbie
+    # niezaklasyfikowanych przykładów dla danej kategorii lub podkategorii
     others_cnt.set_main_others_count(len(neg_data.target))
     logger.info('Hierachical classification process finished.')
 
+    # Raportowanie wyniku procesu klasyfikacji
     logger.info('Summary report:')
     for subtree in categories_tree:
         root_category = subtree[0]

@@ -10,11 +10,11 @@ from prepare_data import build_specific_dataset
 from report import report_category
 from datasets import newsgroups
 
-# Logging
+# Logowanie
 logger = getLogger('svm_classify')
 
 
-# Classifications methods
+# Metody przeprowadzające klasyfikacje
 def classify(category, positive_examples, all_examples, classifier_path):
     logger.info('Category %s - loading classifier: %s', category,
                 classifier_path)

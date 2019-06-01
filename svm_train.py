@@ -13,11 +13,11 @@ import classifier_details
 from prepare_data import build_specific_dataset
 from log import getLogger
 
-# Logging
+# Logowanie
 logger = getLogger('svm_train')
 
 
-# Method to train specific classifier
+# Metoda do trenowania klasyfikatora danej kategorii
 def train(category, positive_examples, all_examples, classifier_path):
     if not os.path.exists(CLFS_FOLDER):
         os.makedirs(CLFS_FOLDER)
@@ -38,7 +38,7 @@ def train(category, positive_examples, all_examples, classifier_path):
         ('clf', svm.SVC())
     ])
 
-    # Parameters for comp classifier
+    # Parametry dla klasyfikatora kategorii: comp
     '''
     parameters = {
         'vect__analyzer': 'word',
@@ -60,7 +60,7 @@ def train(category, positive_examples, all_examples, classifier_path):
     }
     '''
 
-    # Parameters for comp_graphics classifier
+    # Parametry dla klasyfikatora kategorii: comp_graphics
     '''
     parameters = {
         'vect__analyzer': 'word',
@@ -81,7 +81,7 @@ def train(category, positive_examples, all_examples, classifier_path):
         'clf__max_iter': -1
     }
     '''
-    # Parameters for comp_windows classifier
+    # Parametry dla klasyfikatora kategorii: comp_windows
     '''
     parameters = {
         'vect__analyzer': 'word',
@@ -103,7 +103,7 @@ def train(category, positive_examples, all_examples, classifier_path):
     }
     '''
 
-    # Parameters for comp_ibm classifier
+    # Parametry dla klasyfikatora kategorii: comp_ibm
     '''
     parameters = {
         'vect__analyzer': 'word',
@@ -125,7 +125,7 @@ def train(category, positive_examples, all_examples, classifier_path):
     }
     '''
 
-    # Parameters for comp_mac classifier
+    # Parametry dla klasyfikatora kategorii: comp_mac
     '''
     parameters = {
         'vect__analyzer': 'word',
@@ -147,7 +147,7 @@ def train(category, positive_examples, all_examples, classifier_path):
     }
     '''
 
-    # Parameters for comp_x classifier
+    # Parametry dla klasyfikatora kategorii: comp_x
     parameters = {
         'vect__analyzer': 'word',
         'vect__tokenizer': LemmaTokenizer(),
@@ -210,6 +210,7 @@ def train(category, positive_examples, all_examples, classifier_path):
 
 
 if __name__ == "__main__":
+    # Uruchomienie procesu trenowania klasyfikatorów dla podanych kategorii
     categories = [classifier_details.comp_x_details]
     #categories = classifier_details.all_clfs_details
     for clf_details in categories:

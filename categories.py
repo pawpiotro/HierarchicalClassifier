@@ -1,4 +1,4 @@
-# Categories names
+# Nazwy kategorii
 COMP = 'comp'
 REC = 'rec'
 SCI = 'sci'

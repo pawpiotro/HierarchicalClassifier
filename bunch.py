@@ -1,3 +1,4 @@
+# Struktura do przetrzymywania zbiorów danych i informacji z nim związanych
 class bunch:
     def __init__(self):
         self.data = []

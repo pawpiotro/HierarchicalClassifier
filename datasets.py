@@ -1,4 +1,4 @@
-# 20newsgroups datasets
+# Pogrupowane zbiory danych 20newsgroups
 
 comp = ['comp.graphics',
         'comp.os.ms-windows.misc',

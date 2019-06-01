@@ -38,7 +38,8 @@ pipeline = Pipeline([
     ('clf', clf)
 ])
 
-# Params for gridsearch
+# Parametry dla gridsearch - w poszukiwaniu najlepszych parametrów dla danego
+# klasyfikatora.
 parameters = [
     {
         'vect__max_features': [1000, 2000],
@@ -56,7 +57,8 @@ parameters = [
     }
 ]
 
-# Params for randomized search
+# Parametry dla randomized search - w poszukiwaniu najlepszych parametrów dla
+# danego klasyfikatora.
 parameters2 = [
     {
         'vect__max_features': [1000, 2000],
@@ -75,6 +77,7 @@ parameters2 = [
 ]
 
 if __name__ == "__main__":
+    # Uruchomienie procesu wyszukiwania parametrów dla klasyfikatora
     # grid_search = GridSearchCV(pipeline, parameters, cv=5, n_jobs=-1, verbose=20, scoring='f1_macro')
     grid_search = RandomizedSearchCV(pipeline, parameters2[0], cv=2, n_jobs=-1, verbose=20,
                                      scoring='f1_macro', n_iter=20)

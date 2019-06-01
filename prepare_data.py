@@ -8,17 +8,18 @@ from consts import POSITIVE_DATA, NEGATIVE_DATA
 from classifier_details import all_clfs_details
 from log import getLogger
 
-# Logging
+# Logowanie
 logger = getLogger('prepare_data')
 
 
-# Method to get 20newsgroups data
+# Metoda do pobrania zbiorów danych podanych kategorii
 def get_20newsgroups_datasets(data_type, categories):
     logger.info('get_20newsgroups_datasets args: data_type - %s, '
                 'categories - %s', data_type, categories)
     scikit_learn_data_home_path = get_data_home()
     if os.path.exists(scikit_learn_data_home_path):
-        # For more realistic data -> remove=('headers', 'footers', 'quotes')
+        # Dla bardziej realistycznych danych:
+        # Dodac remove=('headers', 'footers', 'quotes')
         datasets = fetch_20newsgroups(data_home=scikit_learn_data_home_path,
                                       subset=data_type,
                                       categories=categories)
@@ -31,7 +32,8 @@ def get_20newsgroups_datasets(data_type, categories):
         return datasets
 
 
-# Methods to create datasets
+# Metody służące za pobranie zbiorów danych, odpowiednią ich modyfikację,
+# zapisanie do pliku bądź wczytanie z pliku.
 def build_specific_dataset(data_type, dataset_name, positive_examples,
                            all_examples):
     logger.info('build_specific_dataset args: data_type - %s, '
@@ -65,7 +67,8 @@ def build_specific_dataset(data_type, dataset_name, positive_examples,
         if not os.path.exists(data_type_path):
             os.makedirs(data_type_path)
 
-        # For more realistic data -> remove=('headers', 'footers', 'quotes')
+        # Dla bardziej realistycznych danych:
+        # Dodac remove=('headers', 'footers', 'quotes')
         dataset = fetch_20newsgroups(data_home=scikit_learn_data_home_path,
                                      subset=data_type,
                                      categories=all_examples)
@@ -92,7 +95,8 @@ def build_dataset(dataset_name, positive_examples, all_examples):
     logger.info('Complete building test dataset: %s', dataset_name)
 
 
-# Methods to modify datasets
+# Metoda do oznaczania danych pozytywnych i negatywnych, biorąc pod uwagę
+# podane kategorie, uznane za źródło przykładów pozytywnych
 def set_pos_neg_example(dataset, category, positive_examples):
     positive_count = 0
     negative_count = 0
@@ -123,7 +127,8 @@ def set_pos_neg_example(dataset, category, positive_examples):
 
 
 if __name__ == "__main__":
-    # Creating datasets
+    # Uruchomienie procesu przygotowania zbiorów danych (zarówno treningowych
+    # jak i testowych)
     for clf_details in all_clfs_details:
         build_dataset(clf_details.category,
                       clf_details.positive_examples,

@@ -1,4 +1,4 @@
-# Specific folder / datatype name
+# Moduł zawierający stałe używane w projekcie
 CLF_DATA = 'clf_data'
 TRAIN_DATA = 'train'
 TEST_DATA = 'test'

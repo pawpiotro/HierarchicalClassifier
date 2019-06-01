@@ -3,8 +3,9 @@ import os
 from bunch import bunch
 
 
-# Methods to get stats info about dataset/classification results
-# Also methods associated with data transforming
+# Metody odpowiedzialne za wyliczanie danych statystycznych związanych
+# z podanym zbiorem danych lub wynikiem klasyfikacji
+# Także metody modyfikujące w zdefiniowany sposób dostarczony zbiór danych
 def get_examples_count(result, is_positive):
     count = 0
     for x in result:

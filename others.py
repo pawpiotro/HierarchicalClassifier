@@ -1,6 +1,7 @@
 import categories
 
-
+# Struktura zawierająca informacje o liczbie przykładów niezaklasyfikowanych
+# na danym poziomie hierarchii
 class others:
     def __init__(self):
         self.main_others_count = 0

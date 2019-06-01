@@ -1,7 +1,7 @@
 from data_utils import get_categories_examples_count
 
 
-# Reports methods
+# Raportowanie wyniku klasyfikacji
 def report_category(logger, current_category):
     logger.info('Category %s - test result for classifier: %s',
                 current_category.category, current_category.classifier_path)
