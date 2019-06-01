@@ -40,10 +40,10 @@ def train(category, positive_examples, all_examples, classifier_path):
 
     parameters = {
         'vect__analyzer': 'word',
-        # 'vect__tokenizer': LemmaTokenizer2(),
-        'vect__max_features': 2000,
-        # 'vect__stop_words': lemma_stopwords2,
-        'vect__stop_words': stopwords.words('english'),
+        'vect__tokenizer': LemmaTokenizer(),
+        'vect__max_features': 200,
+        'vect__stop_words': lemma_stopwords,
+        # 'vect__stop_words': stopwords.words('english'),
         'vect__max_df': 0.6988043885574027,
         'vect__min_df': 0.009380356271717506,
         'vect__ngram_range': (1, 2),
@@ -57,7 +57,7 @@ def train(category, positive_examples, all_examples, classifier_path):
         'clf__max_iter': -1
     }
 
-    logger.info('Stopwords: %s', lemma_stopwords)
+    # logger.info('Stopwords: %s', lemma_stopwords)
     pipeline.set_params(**parameters)
 
     logger.info('Fitting classifier: %s...', classifier_path)
@@ -79,7 +79,7 @@ def train(category, positive_examples, all_examples, classifier_path):
 
 
 if __name__ == "__main__":
-    #categories = [classifier_details.politics_details]
+    # categories = [classifier_details.politics_details]
     categories = classifier_details.all_clfs_details
     for clf_details in categories:
         train(clf_details.category,

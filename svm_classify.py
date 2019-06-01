@@ -9,6 +9,7 @@ from data_utils import intersect_datasets, get_examples_filenames
 from consts import TEST_DATA
 from prepare_data import build_specific_dataset
 from report import report_category
+from datasets import newsgroups
 
 # Logging
 logging.config.fileConfig('logs/conf/logging.conf',
@@ -53,9 +54,14 @@ def classify_dataset(category, dataset, classifier_path):
 
 if __name__ == "__main__":
     category = classifier_details.politics_details
+    print(category.category)
+    print(category.positive_examples)
+    print(category.all_examples)
+    print(newsgroups)
+    print(category.classifier_path)
     (dataset, real_res) = classify(category.category,
                                    category.positive_examples,
-                                   category.all_examples,
+                                   newsgroups,
                                    category.classifier_path)
 
     logger.info('Category %s - intersecting data to'

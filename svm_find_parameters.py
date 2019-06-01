@@ -13,10 +13,17 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.pipeline import Pipeline
+from prepare_data import build_specific_dataset
+from consts import TRAIN_DATA
+import classifier_details
 
 from lemma_tokenizer import lemma_stopwords, LemmaTokenizer
 
-data = fetch_20newsgroups(subset='train')
+# data = fetch_20newsgroups(subset='train')
+category = classifier_details.comp_graphics_details
+data = build_specific_dataset(TRAIN_DATA, category.category,
+                              category.positive_examples,
+                              category.all_examples)
 
 vect = CountVectorizer(analyzer='word', tokenizer=LemmaTokenizer(),
                        stop_words=lemma_stopwords, ngram_range=(1, 2))
@@ -53,7 +60,7 @@ parameters = [
 parameters2 = [
     {
         'vect__max_features': [1000, 2000],
-        'vect__max_df': stats.uniform(0.5, scale=0.2),
+        'vect__max_df': stats.uniform(0.6, scale=0.2),
         'vect__min_df': stats.uniform(0, scale=0.1),
         # 'vect__ngram_range': (1, 2),
         # 'tfidf__use_idf': (True, False),
@@ -69,7 +76,8 @@ parameters2 = [
 
 if __name__ == "__main__":
     # grid_search = GridSearchCV(pipeline, parameters, cv=5, n_jobs=-1, verbose=20, scoring='f1_macro')
-    grid_search = RandomizedSearchCV(pipeline, parameters2[0], cv=5, n_jobs=-1, verbose=20, scoring='f1_macro', n_iter=100)
+    grid_search = RandomizedSearchCV(pipeline, parameters2[0], cv=2, n_jobs=-1, verbose=20,
+                                     scoring='f1_macro', n_iter=20)
 
     print("Performing grid search...")
     print("pipeline:", [name for name, _ in pipeline.steps])
@@ -95,7 +103,7 @@ if __name__ == "__main__":
     x_data = numpy.array(data.data)
     y_true = numpy.array(data.target)
 
-    pred = pipeline.predict(x_data)
+    pred = grid_search.predict(x_data)
 
     print(confusion_matrix(y_true, pred))
     print(classification_report(y_true, pred))
