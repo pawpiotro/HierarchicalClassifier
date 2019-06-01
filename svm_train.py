@@ -9,7 +9,7 @@ from nltk.corpus import stopwords
 
 
 from consts import TRAIN_DATA, CLFS_FOLDER
-from classifier_details import all_clfs_details
+import classifier_details
 from prepare_data import build_specific_dataset
 from log import getLogger
 
@@ -79,7 +79,9 @@ def train(category, positive_examples, all_examples, classifier_path):
 
 
 if __name__ == "__main__":
-    for clf_details in all_clfs_details:
+    #categories = [classifier_details.politics_details]
+    categories = classifier_details.all_clfs_details
+    for clf_details in categories:
         train(clf_details.category,
               clf_details.positive_examples,
               clf_details.all_examples,

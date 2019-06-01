@@ -29,8 +29,7 @@ def classify_one_category(current_category, datasets):
                 'as positive or negative.', current_category.category)
     set_pos_neg_example(modified_datasets,
                         current_category.category,
-                        current_category.positive_examples,
-                        modified_datasets.target_names)
+                        current_category.positive_examples)
 
     logger.info('Category %s - classifying given data...',
                 current_category.category)
@@ -74,7 +73,7 @@ if __name__ == "__main__":
     neg_data = bunch()
     pos_data = bunch()
 
-    for subtree in tmp_tree:
+    for subtree in categories_tree:
         root_category = subtree[0]
         subcategories = subtree[1]
         (neg_data, pos_data) = classify_one_category(root_category,
@@ -99,7 +98,7 @@ if __name__ == "__main__":
     logger.info('Hierachical classification process finished.')
 
     logger.info('Summary report:')
-    for subtree in tmp_tree:
+    for subtree in categories_tree:
         root_category = subtree[0]
         subcategories = subtree[1]
         report_category(logger, root_category)

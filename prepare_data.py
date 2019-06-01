@@ -71,8 +71,7 @@ def build_specific_dataset(data_type, dataset_name, positive_examples,
                                      categories=all_examples)
                                      # remove=('headers', 'footers', 'quotes'))
 
-        set_pos_neg_example(dataset, dataset_name, positive_examples,
-                            all_examples)
+        set_pos_neg_example(dataset, dataset_name, positive_examples)
 
         compressed_dataset = codecs.encode(pickle.dumps(dataset), 'zlib_codec')
 
@@ -94,12 +93,11 @@ def build_dataset(dataset_name, positive_examples, all_examples):
 
 
 # Methods to modify datasets
-def set_pos_neg_example(dataset, category, positive_examples, all_examples):
-    dataset.target_names = [NEGATIVE_DATA, POSITIVE_DATA]
+def set_pos_neg_example(dataset, category, positive_examples):
     positive_count = 0
     negative_count = 0
     for idx in range(len(dataset.target)):
-        if all_examples[dataset.target[idx]] in positive_examples:
+        if dataset.target_names[dataset.target[idx]] in positive_examples:
             '''
             logger.info('Category - %s: '
                         'Document of category %s has been '
@@ -119,6 +117,7 @@ def set_pos_neg_example(dataset, category, positive_examples, all_examples):
             '''
             dataset.target[idx] = 0
             negative_count += 1
+    dataset.target_names = [NEGATIVE_DATA, POSITIVE_DATA]
     logger.info('Category - %s: Positive count - %d, negative_count - %d',
                 category, positive_count, negative_count)
 

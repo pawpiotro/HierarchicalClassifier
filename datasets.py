@@ -5,39 +5,39 @@ comp = ['comp.graphics',
         'comp.sys.ibm.pc.hardware',
         'comp.sys.mac.hardware',
         'comp.windows.x']
-misc = ['misc.forsale']
 rec = ['rec.autos',
        'rec.motorcycles',
        'rec.sport.baseball',
        'rec.sport.hockey']
-sci = ['sci.crypt',
+sci = ['sci.med',
+       'sci.space',
        'sci.electronics',
-       'sci.med',
-       'sci.space']
-politics = ['talk.politics.misc',
+       'sci.crypt']
+politics = ['talk.politics.mideast',
             'talk.politics.guns',
-            'talk.politics.mideast']
-rel = ['talk.religion.misc',
-       'alt.atheism',
-       'soc.religion.christian']
+            'talk.politics.misc']
+rel = ['alt.atheism',
+       'soc.religion.christian',
+       'talk.religion.misc']
+misc = ['misc.forsale']
 
-newsgroups = ['alt.atheism',
-              'comp.graphics',
+newsgroups = ['comp.graphics',
               'comp.os.ms-windows.misc',
               'comp.sys.ibm.pc.hardware',
               'comp.sys.mac.hardware',
               'comp.windows.x',
-              'misc.forsale',
               'rec.autos',
               'rec.motorcycles',
               'rec.sport.baseball',
               'rec.sport.hockey',
-              'sci.crypt',
-              'sci.electronics',
               'sci.med',
               'sci.space',
-              'soc.religion.christian',
-              'talk.politics.guns',
+              'sci.electronics',
+              'sci.crypt',
               'talk.politics.mideast',
+              'talk.politics.guns',
               'talk.politics.misc',
-              'talk.religion.misc']
+              'alt.atheism',
+              'soc.religion.christian',
+              'talk.religion.misc',
+              'misc.forsale']

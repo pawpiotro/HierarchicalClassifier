@@ -36,16 +36,16 @@ class ClassifierDetails:
 
 comp_details = ClassifierDetails(categories.COMP, datasets.comp,
                                  datasets.newsgroups)
-misc_details = ClassifierDetails(categories.MISC, datasets.misc,
-                                 datasets.newsgroups)
-rel_details = ClassifierDetails(categories.REL, datasets.rel,
-                                datasets.newsgroups)
-politics_details = ClassifierDetails(categories.POLITICS, datasets.politics,
-                                     datasets.newsgroups)
 rec_details = ClassifierDetails(categories.REC, datasets.rec,
                                 datasets.newsgroups)
 sci_details = ClassifierDetails(categories.SCI, datasets.sci,
                                 datasets.newsgroups)
+politics_details = ClassifierDetails(categories.POLITICS, datasets.politics,
+                                     datasets.newsgroups)
+rel_details = ClassifierDetails(categories.REL, datasets.rel,
+                                datasets.newsgroups)
+misc_details = ClassifierDetails(categories.MISC, datasets.misc,
+                                 datasets.newsgroups)
 
 comp_graphics_details = ClassifierDetails(categories.COMP_GRAPHICS,
                                           ['comp.graphics'], datasets.comp)
@@ -73,6 +73,26 @@ rec_hockey_details = ClassifierDetails(categories.REC_HOCKEY,
                                        ['rec.sport.hockey'],
                                        datasets.rec)
 
+sci_med_details = ClassifierDetails(categories.SCI_MED, ['sci.med'],
+                                    datasets.sci)
+sci_space_details = ClassifierDetails(categories.SCI_SPACE, ['sci.space'],
+                                      datasets.sci)
+sci_electronics_details = ClassifierDetails(categories.SCI_ELECTRONICS,
+                                            ['sci.electronics'],
+                                            datasets.sci)
+sci_crypt_details = ClassifierDetails(categories.SCI_CRYPT, ['sci.crypt'],
+                                      datasets.sci)
+
+politics_mideast_details = ClassifierDetails(categories.POLITICS_MIDEAST,
+                                             ['talk.politics.mideast'],
+                                             datasets.politics)
+politics_guns_details = ClassifierDetails(categories.POLITICS_GUNS,
+                                          ['talk.politics.guns'],
+                                          datasets.politics)
+politics_misc_details = ClassifierDetails(categories.POLITICS_MISC,
+                                          ['talk.politics.misc'],
+                                          datasets.politics)
+
 rel_atheism_details = ClassifierDetails(categories.REL_ATHEISM,
                                         ['alt.atheism'],
                                         datasets.rel)
@@ -83,41 +103,23 @@ rel_misc_details = ClassifierDetails(categories.REL_MISC,
                                      ['talk.religion.misc'],
                                      datasets.rel)
 
-sci_crypt_details = ClassifierDetails(categories.SCI_CRYPT, ['sci.crypt'],
-                                      datasets.sci)
-sci_electronics_details = ClassifierDetails(categories.SCI_ELECTRONICS,
-                                            ['sci.electronics'],
-                                            datasets.sci)
-sci_med_details = ClassifierDetails(categories.SCI_MED, ['sci.med'],
-                                    datasets.sci)
-sci_space_details = ClassifierDetails(categories.SCI_SPACE, ['sci.space'],
-                                      datasets.sci)
-
-politics_guns_details = ClassifierDetails(categories.POLITICS_GUNS,
-                                          ['talk.politics.guns'],
-                                          datasets.politics)
-politics_mideast_details = ClassifierDetails(categories.POLITICS_MIDEAST,
-                                             ['talk.politics.mideast'],
-                                             datasets.politics)
-politics_misc_details = ClassifierDetails(categories.POLITICS_MISC,
-                                          ['talk.politics.misc'],
-                                          datasets.politics)
 
 # ValueError: The number of classes has to be greater than one; got 1 class
 misc_forsale_details = ClassifierDetails(categories.MISC_FORSALE,
                                          ['misc.forsale'], datasets.newsgroups)
 
-all_clfs_details = [comp_details, misc_details, rel_details, politics_details,
-                    rec_details, sci_details, comp_graphics_details,
-                    comp_windows_details, comp_ibm_details, comp_mac_details,
-                    comp_x_details, rec_autos_details, rec_motorcycles_details,
+all_clfs_details = [comp_details, comp_graphics_details,
+                    comp_windows_details, comp_ibm_details,
+                    comp_mac_details, comp_x_details,
+                    rec_details, rec_autos_details, rec_motorcycles_details,
                     rec_baseball_details, rec_hockey_details,
-                    rel_atheism_details, rel_christian_details,
+                    sci_details, sci_med_details, sci_space_details,
+                    sci_electronics_details, sci_crypt_details,
+                    politics_details, politics_mideast_details,
+                    politics_guns_details, politics_misc_details,
+                    rel_details, rel_atheism_details, rel_christian_details,
                     rel_misc_details,
-                    sci_crypt_details, sci_electronics_details,
-                    sci_med_details, sci_space_details, politics_guns_details,
-                    politics_mideast_details, politics_misc_details,
-                    misc_forsale_details]
+                    misc_details, misc_forsale_details]
 
 comp_subtree = [comp_details, [comp_graphics_details,
                                comp_windows_details, comp_ibm_details,
@@ -129,7 +131,7 @@ rec_subtree = [rec_details, [rec_autos_details,
                              rec_hockey_details]]
 
 sci_subtree = [sci_details, [sci_med_details, sci_space_details,
-                             sci_crypt_details, sci_electronics_details]]
+                             sci_electronics_details, sci_crypt_details]]
 
 politics_subtree = [politics_details, [politics_mideast_details,
                                        politics_guns_details,

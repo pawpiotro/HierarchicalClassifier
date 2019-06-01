@@ -4,7 +4,7 @@ from joblib import load
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.metrics import accuracy_score
 
-from classifier_details import rec_autos_details
+import classifier_details
 from data_utils import intersect_datasets, get_examples_filenames
 from consts import TEST_DATA
 from prepare_data import build_specific_dataset
@@ -52,7 +52,7 @@ def classify_dataset(category, dataset, classifier_path):
 
 
 if __name__ == "__main__":
-    category = rec_autos_details
+    category = classifier_details.politics_details
     (dataset, real_res) = classify(category.category,
                                    category.positive_examples,
                                    category.all_examples,
