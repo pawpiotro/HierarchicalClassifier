@@ -38,6 +38,27 @@ def train(category, positive_examples, all_examples, classifier_path):
         ('clf', svm.SVC())
     ])
 
+    # Parameters for comp classifier
+    parameters = {
+        'vect__analyzer': 'word',
+        'vect__tokenizer': LemmaTokenizer(),
+        'vect__max_features': 1000,
+        'vect__stop_words': lemma_stopwords,
+        # 'vect__stop_words': stopwords.words('english'),
+        'vect__max_df': 0.706030873393441,
+        'vect__min_df': 0.033970089022543615,
+        'vect__ngram_range': (1, 2),
+        # 'tfidf__use_idf': (True, False),
+        # 'tfidf__norm': ('l1', 'l2'),
+        'clf__kernel': 'rbf',
+        'clf__gamma': 1.0439975865365008,
+        'clf__C': 8.437877639063352,
+        'clf__decision_function_shape': 'ovr',
+        'clf__cache_size': 1000,
+        'clf__max_iter': -1
+    }
+
+    '''
     parameters = {
         'vect__analyzer': 'word',
         # 'vect__tokenizer': LemmaTokenizer2(),
@@ -56,6 +77,7 @@ def train(category, positive_examples, all_examples, classifier_path):
         'clf__cache_size': 1000,
         'clf__max_iter': -1
     }
+    '''
 
     logger.info('Stopwords: %s', lemma_stopwords)
     pipeline.set_params(**parameters)
@@ -79,8 +101,8 @@ def train(category, positive_examples, all_examples, classifier_path):
 
 
 if __name__ == "__main__":
-    #categories = [classifier_details.politics_details]
-    categories = classifier_details.all_clfs_details
+    categories = [classifier_details.comp_details]
+    #categories = classifier_details.all_clfs_details
     for clf_details in categories:
         train(clf_details.category,
               clf_details.positive_examples,

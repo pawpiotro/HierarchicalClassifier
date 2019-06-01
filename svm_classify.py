@@ -1,5 +1,3 @@
-import logging
-import logging.config
 from joblib import load
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.metrics import accuracy_score
@@ -7,13 +5,12 @@ from sklearn.metrics import accuracy_score
 import classifier_details
 from data_utils import intersect_datasets, get_examples_filenames
 from consts import TEST_DATA
+from log import getLogger
 from prepare_data import build_specific_dataset
 from report import report_category
 
 # Logging
-logging.config.fileConfig('logs/conf/logging.conf',
-                          defaults={'logfilename': './logs/svm_classify.log'})
-logger = logging.getLogger('svm_classify')
+logger = getLogger('svm_classify')
 
 
 # Classifications methods
@@ -52,7 +49,7 @@ def classify_dataset(category, dataset, classifier_path):
 
 
 if __name__ == "__main__":
-    category = classifier_details.politics_details
+    category = classifier_details.comp_details
     (dataset, real_res) = classify(category.category,
                                    category.positive_examples,
                                    category.all_examples,
