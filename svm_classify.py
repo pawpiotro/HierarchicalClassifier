@@ -8,6 +8,7 @@ from consts import TEST_DATA
 from log import getLogger
 from prepare_data import build_specific_dataset
 from report import report_category
+from datasets import newsgroups
 
 # Logging
 logger = getLogger('svm_classify')
@@ -49,10 +50,10 @@ def classify_dataset(category, dataset, classifier_path):
 
 
 if __name__ == "__main__":
-    category = classifier_details.comp_details
+    category = classifier_details.comp_x_details
     (dataset, real_res) = classify(category.category,
                                    category.positive_examples,
-                                   category.all_examples,
+                                   newsgroups,
                                    category.classifier_path)
 
     logger.info('Category %s - intersecting data to'

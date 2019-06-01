@@ -39,6 +39,7 @@ def train(category, positive_examples, all_examples, classifier_path):
     ])
 
     # Parameters for comp classifier
+    '''
     parameters = {
         'vect__analyzer': 'word',
         'vect__tokenizer': LemmaTokenizer(),
@@ -57,14 +58,122 @@ def train(category, positive_examples, all_examples, classifier_path):
         'clf__cache_size': 1000,
         'clf__max_iter': -1
     }
+    '''
 
+    # Parameters for comp_graphics classifier
     '''
     parameters = {
         'vect__analyzer': 'word',
-        # 'vect__tokenizer': LemmaTokenizer2(),
+        'vect__tokenizer': LemmaTokenizer(),
         'vect__max_features': 2000,
-        # 'vect__stop_words': lemma_stopwords2,
-        'vect__stop_words': stopwords.words('english'),
+        'vect__stop_words': lemma_stopwords,
+        # 'vect__stop_words': stopwords.words('english'),
+        'vect__max_df': 0.6191434298387908,
+        'vect__min_df': 0.09695908809214096,
+        'vect__ngram_range': (1, 2),
+        # 'tfidf__use_idf': (True, False),
+        # 'tfidf__norm': ('l1', 'l2'),
+        'clf__kernel': 'rbf',
+        'clf__gamma': 2.9770837142702145,
+        'clf__C': 234.71519573362391,
+        'clf__decision_function_shape': 'ovr',
+        'clf__cache_size': 1000,
+        'clf__max_iter': -1
+    }
+    '''
+    # Parameters for comp_windows classifier
+    '''
+    parameters = {
+        'vect__analyzer': 'word',
+        'vect__tokenizer': LemmaTokenizer(),
+        'vect__max_features': 1000,
+        'vect__stop_words': lemma_stopwords,
+        # 'vect__stop_words': stopwords.words('english'),
+        'vect__max_df': 0.7278465425357497,
+        'vect__min_df': 0.0051070837987080234,
+        'vect__ngram_range': (1, 2),
+        # 'tfidf__use_idf': (True, False),
+        # 'tfidf__norm': ('l1', 'l2'),
+        'clf__kernel': 'rbf',
+        'clf__gamma': 0.1465772704812669,
+        'clf__C': 125.77150431549414,
+        'clf__decision_function_shape': 'ovr',
+        'clf__cache_size': 1000,
+        'clf__max_iter': -1
+    }
+    '''
+
+    # Parameters for comp_ibm classifier
+    '''
+    parameters = {
+        'vect__analyzer': 'word',
+        'vect__tokenizer': LemmaTokenizer(),
+        'vect__max_features': 1000,
+        'vect__stop_words': lemma_stopwords,
+        # 'vect__stop_words': stopwords.words('english'),
+        'vect__max_df': 0.712781037819612,
+        'vect__min_df': 0.07506840606202485,
+        'vect__ngram_range': (1, 2),
+        # 'tfidf__use_idf': (True, False),
+        # 'tfidf__norm': ('l1', 'l2'),
+        'clf__kernel': 'rbf',
+        'clf__gamma': 2.13379481350056,
+        'clf__C': 156.787010880123,
+        'clf__decision_function_shape': 'ovr',
+        'clf__cache_size': 1000,
+        'clf__max_iter': -1
+    }
+    '''
+
+    # Parameters for comp_mac classifier
+    '''
+    parameters = {
+        'vect__analyzer': 'word',
+        'vect__tokenizer': LemmaTokenizer(),
+        'vect__max_features': 2000,
+        'vect__stop_words': lemma_stopwords,
+        # 'vect__stop_words': stopwords.words('english'),
+        'vect__max_df': 0.6708362135295355,
+        'vect__min_df': 0.003744710441445909,
+        'vect__ngram_range': (1, 2),
+        # 'tfidf__use_idf': (True, False),
+        # 'tfidf__norm': ('l1', 'l2'),
+        'clf__kernel': 'rbf',
+        'clf__gamma': 0.5815247858361874,
+        'clf__C': 1097.5807898700969,
+        'clf__decision_function_shape': 'ovr',
+        'clf__cache_size': 1000,
+        'clf__max_iter': -1
+    }
+    '''
+
+    # Parameters for comp_x classifier
+    parameters = {
+        'vect__analyzer': 'word',
+        'vect__tokenizer': LemmaTokenizer(),
+        'vect__max_features': 1000,
+        'vect__stop_words': lemma_stopwords,
+        # 'vect__stop_words': stopwords.words('english'),
+        'vect__max_df': 0.6819413863406742,
+        'vect__min_df': 0.027866883704999647,
+        'vect__ngram_range': (1, 2),
+        # 'tfidf__use_idf': (True, False),
+        # 'tfidf__norm': ('l1', 'l2'),
+        'clf__kernel': 'rbf',
+        'clf__gamma': 0.22988952016400463,
+        'clf__C': 771.3596815378795,
+        'clf__decision_function_shape': 'ovr',
+        'clf__cache_size': 1000,
+        'clf__max_iter': -1
+    }
+
+    '''
+        'vect__analyzer': 'word',
+        'vect__tokenizer': LemmaTokenizer(),
+        'vect__max_features': 200,
+        parameters = {
+        'vect__stop_words': lemma_stopwords,
+        # 'vect__stop_words': stopwords.words('english'),
         'vect__max_df': 0.6988043885574027,
         'vect__min_df': 0.009380356271717506,
         'vect__ngram_range': (1, 2),
@@ -79,7 +188,7 @@ def train(category, positive_examples, all_examples, classifier_path):
     }
     '''
 
-    logger.info('Stopwords: %s', lemma_stopwords)
+    # logger.info('Stopwords: %s', lemma_stopwords)
     pipeline.set_params(**parameters)
 
     logger.info('Fitting classifier: %s...', classifier_path)
@@ -101,7 +210,7 @@ def train(category, positive_examples, all_examples, classifier_path):
 
 
 if __name__ == "__main__":
-    categories = [classifier_details.comp_details]
+    categories = [classifier_details.comp_x_details]
     #categories = classifier_details.all_clfs_details
     for clf_details in categories:
         train(clf_details.category,
