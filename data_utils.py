@@ -3,9 +3,9 @@ import os
 from bunch import bunch
 
 
-# Metody odpowiedzialne za wyliczanie danych statystycznych związanych
+# Metody odpowiedzialne za wyliczanie danych statystycznych zwiazanych
 # z podanym zbiorem danych lub wynikiem klasyfikacji
-# Także metody modyfikujące w zdefiniowany sposób dostarczony zbiór danych
+# Takze metody modyfikujace w zdefiniowany sposob dostarczony zbior danych
 def get_examples_count(result, is_positive):
     count = 0
     for x in result:

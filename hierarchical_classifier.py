@@ -23,10 +23,10 @@ logger = getLogger('hierarchical_classifier')
 def classify_one_category(current_category, datasets):
     logger.info('Category %s - classification process started.',
                 current_category.category)
-    # Kopia zbioru, która będzie wykorzystana do klasyfikacji
+    # Kopia zbioru, ktora bedzie wykorzystana do klasyfikacji
     modified_datasets = copy.deepcopy(datasets)
 
-    # Oznaczenie przykładów pozytywnych i negatywnych
+    # Oznaczenie przykladow pozytywnych i negatywnych
     logger.info('Category %s - marking given examples '
                 'as positive or negative.', current_category.category)
     set_pos_neg_example(modified_datasets,
@@ -40,7 +40,7 @@ def classify_one_category(current_category, datasets):
                                 modified_datasets,
                                 current_category.classifier_path)
 
-    # Rozdzielenie danych, uwzględniając wynik klasyfikacji
+    # Rozdzielenie danych, uwzgledniajac wynik klasyfikacji
     logger.info('Category %s - intersecting data to'
                 ' positive and negative data...',
                 current_category.category)
@@ -48,7 +48,7 @@ def classify_one_category(current_category, datasets):
                                         datasets,
                                         real_res)
 
-    # Zapisanie danych związanych z rezultatem klasyfikacji
+    # Zapisanie danych zwiazanych z rezultatem klasyfikacji
     logger.info('Category %s - updating result structure...',
                 current_category.category)
     current_category.set_classified_docs(positive_data.filenames)
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     current_all_datasets = get_20newsgroups_datasets(TEST_DATA, newsgroups)
     logger.info('All docs count - %d', len(current_all_datasets.target))
 
-    # Przygotowanie obiektów wynikowych
+    # Przygotowanie obiektow wynikowych
     others_cnt = others()
     neg_data = bunch()
     pos_data = bunch()
@@ -93,21 +93,21 @@ if __name__ == "__main__":
         neg_subdata = bunch()
         pos_subdata = bunch()
 
-        # Zbiór danych zaklasyfikowanych przechodzi do etapu klasyfikacji
+        # Zbior danych zaklasyfikowanych przechodzi do etapu klasyfikacji
         # 2 poziomu
         for subcategory in subcategories:
             (neg_subdata, pos_subdata) = classify_one_category(
                                                     subcategory,
                                                     current_all_datasets)
             current_all_datasets = neg_subdata
-        # Aktualizacja obiektu, zawierającego informacje o liczbie
-        # niezaklasyfikowanych przykładów dla danej kategorii lub podkategorii
+        # Aktualizacja obiektu, zawierajacego informacje o liczbie
+        # niezaklasyfikowanych przykladow dla danej kategorii lub podkategorii
         neg_cnt = len(neg_subdata.target)
         others_cnt.sub_others_counts[root_category.category] = neg_cnt
 
         current_all_datasets = neg_data
-    # Aktualizacja obiektu, zawierającego informacje o liczbie
-    # niezaklasyfikowanych przykładów dla danej kategorii lub podkategorii
+    # Aktualizacja obiektu, zawierajacego informacje o liczbie
+    # niezaklasyfikowanych przykladow dla danej kategorii lub podkategorii
     others_cnt.set_main_others_count(len(neg_data.target))
     logger.info('Hierachical classification process finished.')
 

@@ -3,6 +3,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords, wordnet
 
 
+# Modul odpowiedzialny za dostarczenie mechanizmu lemmatyzacji
 def get_wordnet_pos(word):
     tag = pos_tag([word])[0][1][0].upper()
     tag_dict = {"J": wordnet.ADJ,
@@ -22,7 +23,7 @@ class LemmaTokenizer(object):
                 for t in word_tokenize(doc)]
 
 
-# full lemmatization
+# Pelna lemmatyzacja
 class LemmaTokenizer2(object):
     def __init__(self):
         self.wnl = WordNetLemmatizer()
@@ -32,7 +33,7 @@ class LemmaTokenizer2(object):
                 for t in word_tokenize(doc)]
 
 
-# no need for lemma_stopwords
+# Nie potrzeba podawac stopwordsow
 class LemmaTokenizer3(object):
     def __init__(self):
         self.wnl = WordNetLemmatizer()

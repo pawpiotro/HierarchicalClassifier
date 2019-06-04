@@ -1,4 +1,4 @@
-# Moduł odpowiedzialny za pobranie brakujących bibliotek
+# Modul odpowiedzialny za pobranie brakujacych bibliotek
 
 import nltk
 nltk.download('stopwords')

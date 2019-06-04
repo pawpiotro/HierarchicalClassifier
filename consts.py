@@ -1,4 +1,4 @@
-# Moduł zawierający stałe używane w projekcie
+# Modul zawierajacy stale uzywane w projekcie
 CLF_DATA = 'clf_data'
 TRAIN_DATA = 'train'
 TEST_DATA = 'test'

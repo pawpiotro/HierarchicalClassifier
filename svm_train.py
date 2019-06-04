@@ -210,9 +210,9 @@ def train(category, positive_examples, all_examples, classifier_path):
 
 
 if __name__ == "__main__":
-    # Uruchomienie procesu trenowania klasyfikatorów dla podanych kategorii
+    # Uruchomienie procesu trenowania klasyfikatorw dla podanych kategorii
     categories = [classifier_details.comp_x_details]
-    #categories = classifier_details.all_clfs_details
+    # categories = classifier_details.all_clfs_details
     for clf_details in categories:
         train(clf_details.category,
               clf_details.positive_examples,

@@ -14,7 +14,7 @@ from datasets import newsgroups
 logger = getLogger('svm_classify')
 
 
-# Metody przeprowadzające klasyfikacje
+# Metody przeprowadzajace klasyfikacje
 def classify(category, positive_examples, all_examples, classifier_path):
     logger.info('Category %s - loading classifier: %s', category,
                 classifier_path)
@@ -55,7 +55,6 @@ if __name__ == "__main__":
                                    category.positive_examples,
                                    newsgroups,
                                    category.classifier_path)
-
     logger.info('Category %s - intersecting data to'
                 ' positive and negative data...', category.category)
     (negative_data, positive_data) = intersect_datasets(

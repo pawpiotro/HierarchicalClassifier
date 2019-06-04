@@ -12,7 +12,7 @@ from log import getLogger
 logger = getLogger('prepare_data')
 
 
-# Metoda do pobrania zbiorów danych podanych kategorii
+# Metoda do pobrania zbiorow danych podanych kategorii
 def get_20newsgroups_datasets(data_type, categories):
     logger.info('get_20newsgroups_datasets args: data_type - %s, '
                 'categories - %s', data_type, categories)
@@ -32,8 +32,8 @@ def get_20newsgroups_datasets(data_type, categories):
         return datasets
 
 
-# Metody służące za pobranie zbiorów danych, odpowiednią ich modyfikację,
-# zapisanie do pliku bądź wczytanie z pliku.
+# Metody sluzace za pobranie zbiorow danych, odpowiednia ich modyfikacje,
+# zapisanie do pliku badz wczytanie z pliku.
 def build_specific_dataset(data_type, dataset_name, positive_examples,
                            all_examples):
     logger.info('build_specific_dataset args: data_type - %s, '
@@ -95,8 +95,8 @@ def build_dataset(dataset_name, positive_examples, all_examples):
     logger.info('Complete building test dataset: %s', dataset_name)
 
 
-# Metoda do oznaczania danych pozytywnych i negatywnych, biorąc pod uwagę
-# podane kategorie, uznane za źródło przykładów pozytywnych
+# Metoda do oznaczania danych pozytywnych i negatywnych, biorac pod uwage
+# podane kategorie, uznane za zrodlo przykladow pozytywnych
 def set_pos_neg_example(dataset, category, positive_examples):
     positive_count = 0
     negative_count = 0
@@ -127,7 +127,7 @@ def set_pos_neg_example(dataset, category, positive_examples):
 
 
 if __name__ == "__main__":
-    # Uruchomienie procesu przygotowania zbiorów danych (zarówno treningowych
+    # Uruchomienie procesu przygotowania zbiorow danych (zarowno treningowych
     # jak i testowych)
     for clf_details in all_clfs_details:
         build_dataset(clf_details.category,

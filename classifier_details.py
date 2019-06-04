@@ -5,7 +5,7 @@ from consts import CLFS_FOLDER
 import datasets
 
 
-# Struktura zawierające dane związane z klasyfikatorem danej kategorii
+# Struktura zawierajace dane zwiazane z klasyfikatorem danej kategorii
 class ClassifierDetails:
     def __init__(self, category, positive_examples, all_examples):
         self.category = category
@@ -147,6 +147,6 @@ misc_subtree = [misc_details, [misc_forsale_details]]
 categories_tree = [comp_subtree, rec_subtree, sci_subtree,
                    politics_subtree, rel_subtree, misc_subtree]
 
-# Dla testów
+# Dla testow
 tmp_clfs_details = [misc_forsale_details]
 tmp_tree = [politics_subtree]
